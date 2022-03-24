@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+
+	mariadb:
+		build: requirements/mariadb
+		image: mariadb
+		volumes:
+			- db_data:/var/lib/mysql
+		restart: always
+
+	wordpress:
+		depends_on:
+			- mariadb
+		build: requirements/wordpress
+		image: wordpress
+		volumes:
+			- www_data:/var/www/html
+		restart: always
+
+	nginx:
+		depends_on:
+			- wordpress
+		build: requirements/nginx
+		image: nginx
+		volumes:
+			- www_data:/var/www/html
+		ports:
+			- 443:443
+		restart: always
+
+
+networks:
+	wpsite:
+
+
+volumes:
+
+	db_data:
+		driver: local
+		driver_opts:
+			type: 'none'
+			o: 'bind'
+			device: '~/data/db_data'
+
+	www_data:
+		driver: local
+		driver_opts:
+			type: 'none'
+			o: 'bind'
+			device: '~/data/www'
