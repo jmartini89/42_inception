@@ -2,50 +2,60 @@ version: "3.9"
 
 services:
 
-	mariadb:
-		build: requirements/mariadb
-		image: mariadb
-		volumes:
-			- db_data:/var/lib/mysql
-		restart: always
+  # mariadb-42:
+  # 	build: requirements/mariadb
+  # 	image: mariadb-42
+  #   env_file:
+  #     - .env
+  # 	volumes:
+  # 		- db-data:/var/lib/mysql
+  # 	networks:
+  # 		- wpsite
+  # 	restart: always
 
-	wordpress:
-		depends_on:
-			- mariadb
-		build: requirements/wordpress
-		image: wordpress
-		volumes:
-			- www_data:/var/www/html
-		restart: always
+  # wordpress-42:
+  # 	depends_on:
+  # 		- mariadb-42
+  # 	build: requirements/wordpress
+  # 	image: wordpress
+  #   env_file:
+  #     - .env
+  # 	volumes:
+  # 		- www-data:/var/www/html
+  # 	networks:
+  # 		- wpsite
+  # 	restart: always
 
-	nginx:
-		depends_on:
-			- wordpress
-		build: requirements/nginx
-		image: nginx
-		volumes:
-			- www_data:/var/www/html
-		ports:
-			- 443:443
-		restart: always
+  nginx-42:
+    # depends_on:
+    # 	- wordpress-42
+    build: requirements/nginx
+    image: nginx-42
+    env_file:
+      - .env
+    volumes:
+      - www-data:/var/www/html
+    networks:
+      - wpsite
+    ports:
+      - 443:443
+    restart: always
 
 
 networks:
-	wpsite:
+  wpsite:
 
 
 volumes:
 
-	db_data:
-		driver: local
-		driver_opts:
-			type: 'none'
-			o: 'bind'
-			device: '~/data/db_data'
+  db-data:
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '~/data/db-data'
 
-	www_data:
-		driver: local
-		driver_opts:
-			type: 'none'
-			o: 'bind'
-			device: '~/data/www'
+  www-data:
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '~/data/www-data'
