@@ -41,4 +41,4 @@ status:
 	@docker images
 
 logs:
-	@docker-compose -f ./srcs/docker-compose.yml logs
+	@docker-compose -f ./srcs/docker-compose.yml logs -f --tail="all"

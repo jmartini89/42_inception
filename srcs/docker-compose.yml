@@ -39,6 +39,7 @@ services:
       - wpsite
     ports:
       - 80:80
+      - 443:443
     restart: always
 
 
