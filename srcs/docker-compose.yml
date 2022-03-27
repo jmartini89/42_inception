@@ -2,35 +2,35 @@ version: "3.9"
 
 services:
 
-  # mariadb-42:
-  # 	build: requirements/mariadb
-  # 	image: mariadb-42
-  #   env_file:
-  #     - .env
-  # 	volumes:
-  # 		- db-data:/var/lib/mysql
-  # 	networks:
-  # 		- wpsite
-  # 	restart: always
+  mariadb:
+    build: requirements/mariadb
+    image: mariadb
+    env_file:
+      - .env
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - wpsite
+    restart: always
 
-  # wordpress-42:
-  # 	depends_on:
-  # 		- mariadb-42
-  # 	build: requirements/wordpress
-  # 	image: wordpress
-  #   env_file:
-  #     - .env
-  # 	volumes:
-  # 		- www-data:/var/www/html
-  # 	networks:
-  # 		- wpsite
-  # 	restart: always
+  wordpress:
+    depends_on:
+      - mariadb
+    build: requirements/wordpress
+    image: wordpress
+    env_file:
+      - .env
+    volumes:
+      - www-data:/var/www/html
+    networks:
+      - wpsite
+    restart: always
 
-  nginx-42:
-    # depends_on:
-    # 	- wordpress-42
+  nginx:
+    depends_on:
+      - wordpress
     build: requirements/nginx
-    image: nginx-42
+    image: nginx
     env_file:
       - .env
     volumes:
@@ -38,7 +38,7 @@ services:
     networks:
       - wpsite
     ports:
-      - 443:443
+      - 80:80
     restart: always
 
 

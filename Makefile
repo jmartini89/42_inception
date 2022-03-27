@@ -28,7 +28,7 @@ stop:
 
 clean: down
 	@$(LOG)Cleaning local volumes
-	@rm -rf ~/data
+	@sudo rm -rf ~/data
 
 prune: clean
 	@$(LOG)Prune docker
@@ -39,3 +39,6 @@ status:
 	@docker ps -a
 	@echo "$(GREEN)Docker Images$(RESET)"
 	@docker images
+
+logs:
+	@docker-compose -f ./srcs/docker-compose.yml logs
