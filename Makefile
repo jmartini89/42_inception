@@ -27,7 +27,7 @@ down:
 restart: stop up
 
 deletevolumes: down
-	@echo -n "$(RED)DELETE VOLUMES? [y/N]$(RESET)"
+	@echo -n "$(RED)DELETE VOLUMES? [y/N] $(RESET)"
 	@read line; \
 	if [ "$$line" != "y" ]; then \
 		$(LOG)Volumes deletion aborted; \
