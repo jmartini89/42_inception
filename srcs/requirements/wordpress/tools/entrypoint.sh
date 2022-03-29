@@ -1,5 +1,10 @@
 #!/bin/sh
 
+while ! mariadb -h$WP_DB_HOST -u$MYSQL_USER -p$MYSQL_PASSWORD &>/dev/null; do
+	echo "Waiting for database"
+	sleep 1
+done
+
 if [[ ! -f index.php ]]
 then
 	wp core download --allow-root
