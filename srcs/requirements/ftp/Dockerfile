@@ -2,8 +2,9 @@ FROM alpine:3.14.4
 
 RUN apk update
 RUN apk add --no-cache tzdata \
-	mariadb mariadb-client
+	vsftpd
 
 COPY tools /
+COPY conf/vsftpd.conf /etc/vsftpd
 
 ENTRYPOINT ["sh", "entrypoint.sh"]

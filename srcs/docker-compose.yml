@@ -21,7 +21,7 @@ services:
     env_file:
       - .env
     volumes:
-      - www-data:/var/www/html
+      - wp-data:/var/www/html/wordpress
     networks:
       - wpsite
     restart: always
@@ -34,12 +34,27 @@ services:
     env_file:
       - .env
     volumes:
-      - www-data:/var/www/html
+      - wp-data:/var/www/html/wordpress
     networks:
       - wpsite
     ports:
       - 80:80
       - 443:443
+    restart: always
+
+  ftp:
+    depends_on:
+      - wordpress
+    build: requirements/ftp
+    image: ftp
+    privileged: true
+    env_file:
+      - .env
+    volumes:
+      - wp-data:/var/ftp
+    ports:
+      - "21:21"
+      - 21000-21010:21000-21010
     restart: always
 
 
@@ -55,8 +70,8 @@ volumes:
       o: 'bind'
       device: '~/data/db-data'
 
-  www-data:
+  wp-data:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '~/data/www-data'
+      device: '~/data/wp-data'

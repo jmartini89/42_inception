@@ -1,8 +1,10 @@
 #!/bin/sh
 
-sed -i 's|DATABASE_NAME|'${WP_DB_NAME}'|g' /var/www/html/wordpress/wp-config.php
-sed -i 's|DATABASE_USER|'${WP_DB_USER}'|g' /var/www/html/wordpress/wp-config.php
-sed -i 's|DATABASE_PASS|'${WP_DB_PASSWORD}'|g' /var/www/html/wordpress/wp-config.php
-sed -i 's|DATABASE_HOST|'${WP_DB_HOST}'|g' /var/www/html/wordpress/wp-config.php
+if [[ ! -f index.php ]]
+then
+	wp core download --allow-root
+	wp config create --dbname=$WP_DB_NAME --dbuser=$WP_DB_USER --dbpass=$WP_DB_PASSWORD --dbhost=$WP_DB_HOST --locale=en_DB --allow-root
+	wp core install --url=$DOMAIN_NAME --title=$WP_TITLE --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PWD --admin_email=$WP_ADMIN_EMAIL --allow-root
+fi
 
 php-fpm7 -FR

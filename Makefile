@@ -1,38 +1,45 @@
+RED = \033[31m
 GREEN = \033[32m
 BLUE = \033[34m
 RESET = \033[0m
 LOG = echo "$(BLUE)MAKE LOG$(RESET) "
 
-run: up
-
-volumes:
-	@$(LOG)Creating local volumes
-	@mkdir -p ~/data/db-data
-	@mkdir -p ~/data/www-data
+up: volumes
+	@$(LOG)Running composition
+	@docker-compose -f ./srcs/docker-compose.yml up -d
 
 build: volumes
 	@$(LOG)Building composition
 	@docker-compose -f ./srcs/docker-compose.yml build
 
-up: build
-	@$(LOG)Running composition
-	@docker-compose -f ./srcs/docker-compose.yml up -d
-
-down:
-	@$(LOG)Composition down
-	@docker-compose -f ./srcs/docker-compose.yml down
+volumes:
+	@mkdir -p ~/data/db-data
+	@mkdir -p ~/data/wp-data
 
 stop:
 	@$(LOG)Stopping composition
 	@docker-compose -f ./srcs/docker-compose.yml stop
 
-clean: down
-	@$(LOG)Cleaning local volumes
-	@sudo rm -rf ~/data
+down:
+	@$(LOG)Composition down
+	@docker-compose -f ./srcs/docker-compose.yml down
 
-prune: clean
+restart: stop up
+
+deletevolumes: down
+	@echo -n "$(RED)DELETE VOLUMES? [y/N]$(RESET)"
+	@read line; \
+	if [ "$$line" != "y" ]; then \
+		$(LOG)Volumes deletion aborted; \
+	else \
+	$(LOG)Volumes deleted && sudo rm -rf ~/data; \
+	fi
+
+prune: down
 	@$(LOG)Prune docker
 	@docker system prune -a
+
+destroy: deletevolumes prune
 
 status:
 	@echo "$(GREEN)Docker Containers$(RESET)"
