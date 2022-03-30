@@ -8,4 +8,4 @@ fi
 touch /etc/vsftpd.chroot_list
 chown $FTP_USER:$FTP_USER /var/ftp
 
-/usr/sbin/vsftpd -opasv_min_port=21000 -opasv_max_port=21010 /etc/vsftpd/vsftpd.conf
+exec /usr/sbin/vsftpd -opasv_min_port=21000 -opasv_max_port=21010 /etc/vsftpd/vsftpd.conf

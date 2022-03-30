@@ -7,4 +7,4 @@ then
 	sed -i 's|DOMAIN_NAME|'${DOMAIN_NAME}'|g' /etc/nginx/nginx.conf
 fi
 
-nginx -g "daemon off;"
+exec nginx -g "daemon off;"
